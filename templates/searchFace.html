@@ -1,0 +1,36 @@
+{% extends 'Home.html' %}
+
+{% block content %}
+    <style>
+        h1{
+            font-size : 70px;
+            color :green;
+            text-align : center;
+           }
+
+        h3{
+            font-size : 50px;
+            color : gray;
+            text-align : center;
+        }
+        img{
+            box-shadow: 0px 0px 10px black;
+            border-radius : 10px ;
+        }
+    </style>
+    <!-- Creating 2 image tags -->
+    <div class="container mt-5 pt-5">
+        <h1>customer<span style="color:whit;">Search</span></h1>
+        <div class="row">
+            <div class="col-12 col-sm-12 col-md-7 col-lg-7">
+                <img src = "{% url 'camera' %}">
+            </div>
+            <div class="col-12 col-sm-12 col-md-5 col-lg-5">
+                <h3>Customer</h3>
+
+            </div>
+        </div>
+    </div>
+
+
+{% endblock %}

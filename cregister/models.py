@@ -14,3 +14,7 @@ class CustomerTable(models.Model):
     profilePic = models.FileField(upload_to='profilePic/',blank=True)
     registered_at = models.DateTimeField(auto_now_add=True)
 
+
+
+
+

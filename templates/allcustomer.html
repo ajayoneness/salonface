@@ -22,18 +22,22 @@
     <!-- Creating 2 image tags -->
  <main class="page-content">
     <div class="container-fluid">
-      <h2>Customer Search</h2>
+      <h2>All Customers</h2>
       <hr>
-        <div class="container mt-3 pt-3">
-            <div class="row">
-                <div class="col-12 col-sm-12 col-md-7 col-lg-7">
-                    <img src = "{% url 'camera' %}">
-                </div>
-                <div class="col-12 col-sm-12 col-md-5 col-lg-5">
-                    <p>Customer</p>
 
-                </div>
+        <div class="row">
+            {% for i in customers %}
+            <div class="col-6 col-sm-6 col-md-3 col-lg-3">
+                <a class="card p-3 text-center" href="#" style="text-aligin : center; text-decuration : none;">
+
+                    <img class="" src="{{i.profilePic.url}}" width="50px" height="50px">
+                    <p>{{i.fname}} {{f.lname}}</p>
+                    <p>{{i.mobNum}}</p>
+                </a>
             </div>
+
+            {% endfor %}
+
         </div>
     </div>
   </main>

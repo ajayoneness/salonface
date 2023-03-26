@@ -10,10 +10,11 @@
       <div class="container">
           <div class="row">
             <div class="col-md-12 col-12 col-sm-12 col-lg">
-                  <form>
+                  <form method="post" enctype="multipart/form-data">
+                      {% csrf_token %}
                        <div class="mb-3">
                         <label for="exampleInputPassword1" class="form-label">Mob. Number</label>
-                        <input type=number maxlength="10" class="form-control ajj">
+                        <input type=number maxlength="10" name="mobnum" class="form-control ajj">
                       </div>
 
 
@@ -23,14 +24,14 @@
 
                               <div class="mb-3">
                                 <label for="exampleInputPassword1" class="form-label">First Name</label>
-                                <input type=text maxlength="10" class="form-control" >
+                                <input type=text name="fname"  class="form-control" >
                               </div>
 
                           </div>
                           <div class="col-md-6 col-sm-12 col-12 col-lg-6">
                               <div class="mb-3">
                                 <label for="exampleInputPassword1" class="form-label">Last Name </label>
-                                <input type=text maxlength="10" class="form-control" >
+                                <input type=text name="lname" class="form-control" >
                               </div>
 
                           </div>
@@ -43,7 +44,7 @@
                       
                       <div class="mb-3">
                         <label for="exampleInputEmail1" class="form-label">Email address</label>
-                        <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+                        <input name="email" type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
                         <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
                       </div>
                       
@@ -70,14 +71,14 @@
                           <div class="col-md-6 col-sm-12 col-12 col-lg-6">
                                <div class="mb-3">
                                 <label for="exampleInputPassword1" class="form-label">Date of Birth</label>
-                                <input type="date" class="form-control" id="exampleInputPassword1">
+                                <input name="dob" type="date" class="form-control" id="exampleInputPassword1">
                               </div>
                           </div>
                           <div class="col-md-6 col-sm-12 col-12 col-lg-6">
 
                               <div class="mb-3">
                                 <label for="exampleInputPassword1" class="form-label">Aniversary</label>
-                                <input type="date" class="form-control" id="exampleInputPassword1">
+                                <input name="aniversary" type="date" class="form-control" id="exampleInputPassword1">
                               </div>
 
                           </div>
@@ -89,18 +90,18 @@
                       
                       <div class="mb-3">
                         <label for="exampleInputPassword1" class="form-label">Notes</label>
-                        <textarea class="form-control" id="exampleInputPassword1"></textarea>
+                        <textarea name="note" class="form-control" id="exampleInputPassword1"></textarea>
                       </div>
                       
                       
                       <div class="mb-3">
                         <label for="exampleInputPassword1" class="form-label">Dummy1 </label>
-                        <input type="number" class="form-control" id="exampleInputPassword1">
+                        <input name="dummy" type="number" class="form-control" id="exampleInputPassword1">
                       </div>
 
                       <div class="mb-3">
                           <label class="form-label">Profile Pic </label>
-                        <input type="file" class="form-control" >
+                        <input type="file" name="pimg" class="form-control" >
                       </div>
 
                       <button type="submit" class="btn btn-primary">Register Now</button>

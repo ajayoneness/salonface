@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render,redirect,reverse
 import threading
 import cv2
 from django.views.decorators import gzip
@@ -6,13 +6,19 @@ from django.http import StreamingHttpResponse
 import face_recognition
 import numpy as np
 from cregister.models import CustomerTable
-from pathlib import Path
-import json
+from django.core import serializers
 from django.http import JsonResponse
 
+def customerDetails(idd):
+    customerObj = CustomerTable.objects.get(id=idd)
+    serialized_object = serializers.serialize('json', [customerObj])
+    print(serialized_object)
+    return JsonResponse(serialized_object, safe=False)
 
 
-BASE_DIR = Path(__file__).resolve().parent.parent
+
+
+
 
 def findencodings(images):
     encodelist =[]
@@ -32,6 +38,7 @@ def video(request):
 def opencv(request):
     try:
         cam = VideoCamera()
+
         #logic
         return StreamingHttpResponse(gen(cam), content_type='multipart/x-mixed-replace;boundary=frame')
     except:
@@ -83,18 +90,15 @@ class VideoCamera(object):
 
                     if matches[matchIndex] and faceDis[matchIndex] < 0.5:
                         name = classname[matchIndex].upper()
-                        cusobj = CustomerTable.objects.get(id=int(name))
-                        cusName  =cusobj.fname
-
-
-
+                        # cusobj = CustomerTable.objects.get(id=int(name))
+                        # cusName  =cusobj.fname
 
                         y1, x2, y2, x1 = faceLoc
                         y1, x2, y2, x1 = y1 * 4, x2 * 4, y2 * 4, x1 * 4
                         cv2.rectangle(self.frame, (x1, y1), (x2, y2), (0, 255, 0), 2)
                         cv2.rectangle(self.frame, (x1, y2 - 35), (x2, y2), (0, 255, 0), cv2.FILLED)
-                        cv2.putText(self.frame, cusName, (x1 + 6, y2 - 6), cv2.FONT_HERSHEY_COMPLEX, 1, (255, 255, 255), 2)
-
+                        cv2.putText(self.frame, name, (x1 + 6, y2 - 6), cv2.FONT_HERSHEY_COMPLEX, 1, (255, 255, 255), 2)
+                        return int(name)
             except:
                 print("No face found")
 

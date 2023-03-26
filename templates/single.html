@@ -1,0 +1,51 @@
+{% extends 'index.html' %}
+
+{% block content %}
+    <style>
+        h1{
+            font-size : 70px;
+            color :green;
+            text-align : center;
+           }
+
+        h3{
+            font-size : 50px;
+            color : gray;
+            text-align : center;
+        }
+        img{
+            box-shadow: 0px 0px 10px black;
+            border-radius : 10px ;
+        }
+    </style>
+
+    <!-- Creating 2 image tags -->
+ <main class="page-content">
+    <div class="container-fluid">
+      <h2>{{single.fname}} {{single.lname}}</h2>
+      <hr>
+
+        <div class="row">
+            <div class="col-6 col-sm-6 col-md-6 col-lg-6">
+                <img src="{{single.profilePic.url}}" width = 50%; >
+            </div>
+
+            <div class="col-6 col-sm-6 col-md-6 col-lg-6 mt-5">
+
+                <p>Mobile No. : {{single.mobNum}}</p>
+                <p>Email Id. : {{single.emailId}}</p>
+                <p>Gender : {{single.gender}}</p>
+                <p>DOB : {{single.dob}}</p>
+                <p>Aniversary : {{single.aniversary}}</p>
+                <p>Customer Note : {{single.customerNote}}</p>
+                <p>Dummy1 : {{single.dummy1}}</p>
+                <p>Register_at : {{single.registered_at}}</p>
+
+            </div>
+
+        </div>
+    </div>
+  </main>
+
+
+{% endblock %}

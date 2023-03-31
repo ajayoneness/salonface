@@ -1,5 +1,19 @@
 {% extends 'index.html' %}
     {% block content %}
+
+<style>
+
+    input,textarea,.butt{
+
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    }
+
+</style>
+
+
+
+
+
 <!--      Customer Registation   -->
       <main class="page-content">
 
@@ -10,12 +24,14 @@
       <div class="container">
           <div class="row">
             <div class="col-md-12 col-12 col-sm-12 col-lg">
-                  <form method="post" enctype="multipart/form-data">
+                  <form method="post" enctype="multipart/form-data" id="formsubmit">
                       {% csrf_token %}
                        <div class="mb-3">
                         <label for="exampleInputPassword1" class="form-label">Mob. Number</label>
-                        <input type=number maxlength="10" name="mobnum" class="form-control ajj">
+                        <input type=number maxlength="10" name="mobnum" id="mobnum" class="form-control ajj">
                       </div>
+
+
 
 
                       <div class="row">
@@ -24,14 +40,14 @@
 
                               <div class="mb-3">
                                 <label for="exampleInputPassword1" class="form-label">First Name</label>
-                                <input type=text name="fname"  class="form-control" >
+                                <input type=text name="fname" id="fname"  class="form-control" >
                               </div>
 
                           </div>
                           <div class="col-md-6 col-sm-12 col-12 col-lg-6">
                               <div class="mb-3">
                                 <label for="exampleInputPassword1" class="form-label">Last Name </label>
-                                <input type=text name="lname" class="form-control" >
+                                <input type=text name="lname" id="lname" class="form-control" >
                               </div>
 
                           </div>
@@ -44,25 +60,34 @@
                       
                       <div class="mb-3">
                         <label for="exampleInputEmail1" class="form-label">Email address</label>
-                        <input name="email" type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+                        <input name="email" type="email" class="form-control" id="email" aria-describedby="emailHelp">
                         <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
                       </div>
                       
 <!--                      gender-->
                       
-                      <div class="mb-3">
+                      <div class="mb-3 ">
                         <label for="exampleInputEmail1" class="form-label">Gender</label><br>
-
-                          <input class="form-check-input" type="radio" name="gender">
-                          <label class="form-check-label" for="flexRadioDefault1">
-                            Male
-                          </label>
-
-                          <input class="form-check-input" type="radio" name="gender">
-                          <label class="form-check-label" for="flexRadioDefault2">
-                            Female
-                          </label>
-
+                          <div class="row ml-5">
+                              <div class="">
+                                  <input class="form-check-input" type="radio" value="male" name="gender">
+                                  <label class="form-check-label" for="flexRadioDefault1">
+                                    Male
+                                  </label>
+                              </div>
+                              <div class="ml-5">
+                                   <input class="form-check-input" type="radio" value="female" name="gender">
+                                  <label class="form-check-label" for="flexRadioDefault2">
+                                    Female
+                                  </label>
+                              </div>
+                              <div class="ml-5">
+                                   <input class="form-check-input" type="radio" value="other" name="gender">
+                                  <label class="form-check-label" for="flexRadioDefault2">
+                                    prefer not say
+                                  </label>
+                              </div>
+                          </div>
                       </div>
 
 
@@ -71,7 +96,7 @@
                           <div class="col-md-6 col-sm-12 col-12 col-lg-6">
                                <div class="mb-3">
                                 <label for="exampleInputPassword1" class="form-label">Date of Birth</label>
-                                <input name="dob" type="date" class="form-control" id="exampleInputPassword1">
+                                <input name="dob"  type="date" class="form-control" id="dob">
                               </div>
                           </div>
                           <div class="col-md-6 col-sm-12 col-12 col-lg-6">
@@ -87,24 +112,51 @@
 
 
 
-                      
                       <div class="mb-3">
                         <label for="exampleInputPassword1" class="form-label">Notes</label>
-                        <textarea name="note" class="form-control" id="exampleInputPassword1"></textarea>
+                        <textarea name="note" id="note" maxlength="25" class="form-control"></textarea>
                       </div>
-                      
-                      
-                      <div class="mb-3">
-                        <label for="exampleInputPassword1" class="form-label">Dummy1 </label>
-                        <input name="dummy" type="number" class="form-control" id="exampleInputPassword1">
-                      </div>
+
 
                       <div class="mb-3">
                           <label class="form-label">Profile Pic </label>
-                        <input type="file" name="pimg" class="form-control" >
+                          <div class="row">
+
+                              <div class="col-sm-8 col-md-10 col-lg-10" id="inputimg">
+                                  <input type="file" name="pimg"  class="form-control"  id="imginput" accept=".jpg,.png" >
+                              </div>
+                              <div class="col-sm-4 col-md-2 col-lg-2">
+                                  <input type="button" class="btn btn-success butt" id="cam" style="width : 100%;" value="camera">
+                              </div>
+
+                          </div>
+
+
                       </div>
 
-                      <button type="submit" class="btn btn-primary">Register Now</button>
+                      <div  id="webcam" style="display: none;">
+                      <div class="row">
+                            <div class="col-lg-6" align="center">
+                                <label>Capture live photo</label>
+                                <div id="my_camera" class="pre_capture_frame" ></div>
+                                <input type="hidden" name="captured_image_data" id="captured_image_data">
+                                <br>
+                                <input type="button" class="btn btn-info btn-round btn-file" value="Take Snapshot" id="takesnap">
+                            </div>
+                            <div class="col-lg-6" align="center">
+                                <label>Result</label>
+                                <div id="results" >
+                                    <img style="width: 350px;" height="287px" class="after_capture_frame" src="image_placeholder.jpg" />
+                                </div>
+                                <br>
+
+                            </div>
+                      </div>
+                      </div><br><br>
+
+
+
+                      <input class="btn btn-primary" id="regnow" value="Register Now">
                     </form>
 
             </div>
@@ -116,25 +168,125 @@
   </main>
 
 
+<!-- Required library for webcam -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" ></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/webcamjs/1.0.24/webcam.js"></script>
+
+<script>
+
+    $(document).ready(function() {
+      $('#imginput').change(function() {
+        var fileSize = this.files[0].size; // in bytes
+        if (fileSize > 500000) { // 500kb in bytes
+          alert('File size exceeds 500kb limit. Please choose a smaller file.');
+          $(this).val(null); // clears the selected file
+        }
+      });
+
+
+      $("#regnow").click(function(){
+        //var genderValue = $('input[name="gender"]:checked').val();
+
+        if ($("#mobnum").val()==""){
+            alert("enter your mobile number")
+        }
+        else if ($("#fname").val()==""){
+            alert("enter First Name")
+        }
+
+        else if ($("#lname").val()==""){
+            alert("enter your Last Name")
+        }
+        else if ($("#email").val()==""){
+            alert("enter your EmailId")
+        }
+
+<!--        else if (!genderValue) {                    -->
+<!--          alert('Please select a gender.')          -->
+<!--        }                                           -->
+
+        else if($("#dob").val()==""){
+            alert("Please Enter your Date of Birth")
+        }
+
+        else if($('#note').val() == ""){
+            alert("Please Enter your Notes")
+        }
+
+         //else if($("#imginput").val()==""){
+           // alert("Please Enter your Profile Image")
+        //}
+
+        else{
+            alert("submit")
+            $( "#formsubmit" ).submit();
+        }
+
+
+
+      })
+
+
+
+
+
+
+
+
+        $("#cam").click(function(){
+
+            if ($("#cam").val()=="camera"){
+            $("#webcam").css("display","block")
+            $("#inputimg").css("display","none")
+            $("#cam").val("upload")
+            }
+
+          else if ($("#cam").val() =="upload"){
+            $("#webcam").css("display","none")
+            $("#inputimg").css("display","block")
+            $("#cam").val("camera")
+
+            }
+
+
+            Webcam.set({
+            width: 350,
+            height: 287,
+            image_format: 'jpeg',
+            jpeg_quality: 120
+        });
+
+        Webcam.attach('#my_camera');
+
+        $('#takesnap').click(function(){
+            Webcam.snap(function(data_uri) {
+
+                $('#results').html('<img class="after_capture_frame" src="'+data_uri+'"/>');
+                $('#captured_image_data').val(data_uri);
+                console.log(data_uri)
+
+
+            });
+        });
+
+
+
+
+
+
+        })
+
+
+
+
+
+
+    });
+
+
+
+</script>
+
  
 {% endblock %}
       
-            
-<!--      footer -->
-<footer class="bg-light text-center text-lg-start mt-5">
-    <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2);">
-                © 2022 Copyright:
-    <a class="text-dark" href="https://codeajay.blogspot.com/">codeAj Production</a>
-    </div>    
-      
-</footer>
-
-      
-      
-      
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
-
-   
-  </body>
-</html>

@@ -23,9 +23,30 @@
  <main class="page-content">
     <div class="container-fluid">
       <h2>All Customers</h2>
+        <form method="post">
+            {% csrf_token %}
+            <div class="row">
+                <div class="col-3 col-sm-3 col-md-4 col-lg-4">
+
+                    <select name="search" id="search" class="form-control">
+                      <option value="note">Note</option>
+                      <option value="name">Name</option>
+                      <option value="number">Mob. Number</option>
+                    </select>
+
+                </div>
+                <div class="col-4 col-sm-4 col-md-6 col-lg-6">
+                    <input name="searchbox" type="search" id="searchbox" class="form-control">
+                </div>
+                <div class="col-2 col-sm-2 col-md-2 col-lg-2">
+                    <button  type="submit" class="btn btn-success" id="find" >Search</button>
+                </div>
+            </div>
+        </form>
       <hr>
 
         <div class="row">
+            {% if customers %}
             {% for i in customers %}
             <div class="col-6 col-sm-6 col-md-3 col-lg-3">
                 <a class="card p-3 text-center" href="{% url 'single' idd=i.id %}" style="text-aligin : center; text-decuration : none;">
@@ -33,14 +54,34 @@
                     <img class="" src="{{i.profilePic.url}}" width="dpx" height="150px">
                     <p>{{i.fname}} {{i.lname}}</p>
                     <p>{{i.mobNum}}</p>
+
                 </a>
             </div>
 
             {% endfor %}
+            {% else %}
+                <h2>NO Customer Found </h2>
+
+            {% endif %}
 
         </div>
     </div>
   </main>
+
+
+<script>
+
+
+    $("#find").click(function(){
+        seach = $("#searchbox").val()
+        if(seach == ""){
+            alert("Enter the word")
+        }
+
+    })
+
+
+</script>
 
 
 {% endblock %}

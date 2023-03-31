@@ -1,4 +1,4 @@
-from django.shortcuts import render,redirect,reverse
+from django.shortcuts import render,HttpResponse
 import threading
 import cv2
 from django.views.decorators import gzip
@@ -7,25 +7,30 @@ import face_recognition
 import numpy as np
 from cregister.models import CustomerTable
 from django.core import serializers
-from django.http import JsonResponse
+import json
+
+
 
 def customerDetails(idd):
     customerObj = CustomerTable.objects.get(id=idd)
-    serialized_object = serializers.serialize('json', [customerObj])
-    print(serialized_object)
-    return JsonResponse(serialized_object, safe=False)
-
-
-
-
+    customerData = {
+        'fname': customerObj.fname,
+        'lname': customerObj.lname,
+        'email': customerObj.emailId,
+    }
+    print(customerData)
+    return HttpResponse(json.dumps(customerData), content_type='application/json')
 
 
 def findencodings(images):
     encodelist =[]
     for img in images:
-        img = cv2.cvtColor(img,cv2.COLOR_BGR2RGB)
-        encode = face_recognition.face_encodings(img)[0]
-        encodelist.append(encode)
+        try:
+            img = cv2.cvtColor(img,cv2.COLOR_BGR2RGB)
+            encode = face_recognition.face_encodings(img)[0]
+            encodelist.append(encode)
+        except:
+            continue
     return encodelist
 
 
@@ -38,8 +43,6 @@ def video(request):
 def opencv(request):
     try:
         cam = VideoCamera()
-
-        #logic
         return StreamingHttpResponse(gen(cam), content_type='multipart/x-mixed-replace;boundary=frame')
     except:
         print("no camera found")
@@ -90,15 +93,16 @@ class VideoCamera(object):
 
                     if matches[matchIndex] and faceDis[matchIndex] < 0.5:
                         name = classname[matchIndex].upper()
-                        # cusobj = CustomerTable.objects.get(id=int(name))
-                        # cusName  =cusobj.fname
+                        cusobj = CustomerTable.objects.get(id=int(name))
+                        cusName  =cusobj.fname
 
                         y1, x2, y2, x1 = faceLoc
                         y1, x2, y2, x1 = y1 * 4, x2 * 4, y2 * 4, x1 * 4
                         cv2.rectangle(self.frame, (x1, y1), (x2, y2), (0, 255, 0), 2)
                         cv2.rectangle(self.frame, (x1, y2 - 35), (x2, y2), (0, 255, 0), cv2.FILLED)
-                        cv2.putText(self.frame, name, (x1 + 6, y2 - 6), cv2.FONT_HERSHEY_COMPLEX, 1, (255, 255, 255), 2)
-                        return int(name)
+                        cv2.putText(self.frame, cusName, (x1 + 6, y2 - 6), cv2.FONT_HERSHEY_COMPLEX, 1, (255, 255, 255), 2)
+                        customerDetails(int(name))
+
             except:
                 print("No face found")
 

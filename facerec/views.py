@@ -7,19 +7,13 @@ import face_recognition
 import numpy as np
 from cregister.models import CustomerTable
 from django.core import serializers
-import json
-
 
 
 def customerDetails(idd):
     customerObj = CustomerTable.objects.get(id=idd)
-    customerData = {
-        'fname': customerObj.fname,
-        'lname': customerObj.lname,
-        'email': customerObj.emailId,
-    }
-    print(customerData)
-    return HttpResponse(json.dumps(customerData), content_type='application/json')
+    serialized_object = serializers.serialize('json', [customerObj])
+    print(serialized_object)
+    return HttpResponse(f"{serialized_object}")
 
 
 def findencodings(images):
@@ -36,13 +30,15 @@ def findencodings(images):
 
 
 def video(request):
-    return render(request , "searchFace.html")
+    return render(request , "searchFace.html", {'idd': 0})
 
 
 @gzip.gzip_page
 def opencv(request):
     try:
         cam = VideoCamera()
+
+        #logic
         return StreamingHttpResponse(gen(cam), content_type='multipart/x-mixed-replace;boundary=frame')
     except:
         print("no camera found")
@@ -52,6 +48,7 @@ def opencv(request):
 class VideoCamera(object):
     def __init__(self):
         self.video = cv2.VideoCapture(0)
+        self.idd = 0
         (self.grabbed , self.frame) = self.video.read()
         threading.Thread(target=self.update, args=()).start()
 
@@ -93,6 +90,7 @@ class VideoCamera(object):
 
                     if matches[matchIndex] and faceDis[matchIndex] < 0.5:
                         name = classname[matchIndex].upper()
+                        self.idd = int(name)
                         cusobj = CustomerTable.objects.get(id=int(name))
                         cusName  =cusobj.fname
 
@@ -101,8 +99,7 @@ class VideoCamera(object):
                         cv2.rectangle(self.frame, (x1, y1), (x2, y2), (0, 255, 0), 2)
                         cv2.rectangle(self.frame, (x1, y2 - 35), (x2, y2), (0, 255, 0), cv2.FILLED)
                         cv2.putText(self.frame, cusName, (x1 + 6, y2 - 6), cv2.FONT_HERSHEY_COMPLEX, 1, (255, 255, 255), 2)
-                        customerDetails(int(name))
-
+                        #customerDetails(int(name))
             except:
                 print("No face found")
 
@@ -110,5 +107,8 @@ class VideoCamera(object):
 def gen(camera):
     while True:
         frame = camera.get_frame()
-        yield(b'--frame\r\n'
-              b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n\r\n')
+        idd = camera.idd
+        #customerDetails(int(idd))
+
+        yield (b'--frame\r\n'
+               b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n\r\n' + str(idd).encode() + b'\r\n\r\n')

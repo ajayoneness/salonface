@@ -31,34 +31,12 @@
                 </div>
                 <div class="col-12 col-sm-12 col-md-5 col-lg-5">
                     <p>Customer</p>
-                    <div id="customer-details"></div>
-
+                    <p>{{idd}}</p>
                 </div>
-
-
             </div>
         </div>
     </div>
   </main>
-
-
-<script>
-
-function showCustomerDetails(id){
-
-    $.get('/customer-details/' + id, function(data) {
-        $('#customer-details').html(data);
-    });
-}
-
-
-function recognizeFace(name) {
-    $('#customer-details').html('Recognized customer: ' + name);
-    showCustomerDetails(name);
-}
-
-
-</script>
 
 
 {% endblock %}
